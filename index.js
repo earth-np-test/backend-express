@@ -7,6 +7,7 @@ const { userRouter } = require("./src/userRoute");
 const { User } = require("./src/model/userModel");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
@@ -17,7 +18,6 @@ const protect = async (req, res, next) => {
     res.status(403).send("Not Auth");
   }
   const token = headerToken.split(" ")[1];
-  console.log(token);
   if (!token) {
     res.status(403).send("Not Auth");
   }
@@ -46,13 +46,14 @@ app.all("*", (req, res) => {
 
 // start app
 
+const port = process.env.PORT || process.argv[2] || 8080;
+
 mongoose
   .connect(
     "mongodb+srv://earth:testtest123123@cluster0.olxyu.mongodb.net/mern?retryWrites=true&w=majority"
   )
   .then(() => {
     console.log("Connect mongodb success");
-    const port = 4000;
 
     app.listen(port, () => {
       console.log("Run server on port:", port);
